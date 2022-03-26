@@ -25,15 +25,8 @@ def count_outliers(data,col):
             y = data[data[col] > maximum][col].size
             counts.append(i)
             print('Число выбросов: ', x+y, '\n')
-for i in df.columns:
+for i in df[num_col]:
     count_outliers(df,i)
-
-    
-LE=LabelEncoder()
-for i in obj_col:
-    df[i]=df[[i]].apply(LE.fit_transform)
- 
-
 
 '''
 Визуализация и анализ
@@ -42,3 +35,30 @@ plt.figure(figsize=(16,9))
 ax = sns.heatmap(df.corr(),annot = True,cmap = 'viridis')
 plt.show()
 
+df['Age_cut'] = pd.qcut(df['Age'], q=5)
+df.groupby('Age_cut').agg({'Response' : ['mean','count']})
+
+df.groupby('Education').agg({'Response' : ['mean','count']})
+
+df.groupby('Living_Status').agg({'Response' : ['mean','count']})
+
+df['Visits_cut'] = pd.qcut(df['NumWebVisitsMonth'], q=4)
+df.groupby('Visits_cut').agg({'Response' : ['mean','count']})
+
+
+
+    
+LE=LabelEncoder()
+for i in obj_col:
+    df[i]=df[[i]].apply(LE.fit_transform)
+ 
+
+del_cols = ['Age_cut', 'Visits_cut', 'Response']
+y = df['Response']
+X = df.drop(del_cols, axis = 1)
+
+X = X["Dt_Customer"].values.astype('datetime64[D]')
+
+scaler = StandardScaler()
+scaler.fit(X)
+scaled_features = pd.DataFrame(scaler.transform(X),columns= X.columns )
