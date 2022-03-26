@@ -1,0 +1,59 @@
+import numpy as np 
+import pandas as pd
+import datetime
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.preprocessing import LabelEncoder
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
+from sklearn.cluster import KMeans
+from sklearn import metrics
+import warnings
+import sys
+if not sys.warnoptions:
+    warnings.simplefilter("ignore")
+np.random.seed(42)
+
+df = pd.read_csv('/marketing_campaign.csv', sep="\t")
+
+df.isnull().sum() * 100 / len(df)
+
+print("Размер датафрейма:", df.shape)
+
+print("Названия столбцов: \n", df.columns)
+
+print('Процент нулевых значений: ', df.isnull().sum() * 100 / len(df))
+
+df = df.dropna()
+df = df.drop_duplicates()
+print("Количество строк после удаления пропущенных значений и дубликатов:", len(df))
+
+df["Dt_Customer"] = pd.to_datetime(df["Dt_Customer"])
+print('Дата регистрации первого клиента: ', df.Dt_Customer.min())
+print('Дата регистрации последнего клиента: ', df.Dt_Customer.max())
+
+df["Age"] = 2022-df["Year_Birth"]
+
+df['Marital_Status'].unique()
+
+df["Living_Status"]=df["Marital_Status"].replace({"Married":"Family", "Together":"Family", 
+                                                    "Absurd":"Alone", "Widow":"Alone", "YOLO":"Alone", 
+                                                    "Divorced":"Alone", "Single":"Alone"})
+
+df['Education'].unique()
+
+df["Education"]=df["Education"].replace({"Basic":"Undergraduate","2n Cycle":"Undergraduate", 
+                                         "Graduation":"Graduate", "Master":"Postgraduate", "PhD":"Postgraduate"})
+
+col_to_drop = ['Year_Birth', 'Marital_Status']
+df = df.drop(col_to_drop, axis=1)
+
+Вычислим сводную статистику по столбцам
+
+num_col = list(df.select_dtypes(['int64', 'float64', 'datetime64[ns]']).columns)
+df.loc[:, df.columns != 'ID'].describe().style.background_gradient(cmap='YlOrRd')  
+obj_col = list(df.select_dtypes(['object']).columns)
+
+for col in num_col:
+  q = df[col].quantile(0.999)
+  df[df[col] < q]
