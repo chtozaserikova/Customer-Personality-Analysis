@@ -48,7 +48,9 @@ df["Education"]=df["Education"].replace({"Basic":"Undergraduate","2n Cycle":"Und
 col_to_drop = ['Year_Birth', 'Marital_Status']
 df = df.drop(col_to_drop, axis=1)
 
+'''
 Вычислим сводную статистику по столбцам
+'''
 
 num_col = list(df.select_dtypes(['int64', 'float64', 'datetime64[ns]']).columns)
 df.loc[:, df.columns != 'ID'].describe().style.background_gradient(cmap='YlOrRd')  
@@ -57,3 +59,18 @@ obj_col = list(df.select_dtypes(['object']).columns)
 for col in num_col:
   q = df[col].quantile(0.999)
   df[df[col] < q]
+
+'''
+Найдем неинформативные признаки, у которых более 95% строк содержат одно и то же значение
+'''
+num_rows = len(df.index)
+low_information_cols = [] 
+
+for col in df.columns:
+    cnts = df[col].value_counts(dropna=False)
+    top_pct = (cnts/num_rows).iloc[0]
+    if top_pct > 0.95:
+        low_information_cols.append(col)
+        print('{0}: {1:.5f}%'.format(col, top_pct*100))
+        print(cnts)
+        print()
