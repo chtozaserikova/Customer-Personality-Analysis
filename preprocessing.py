@@ -28,6 +28,7 @@ def count_outliers(data,col):
 for i in df[num_col]:
     count_outliers(df,i)
 
+
 '''
 Визуализация и анализ
 '''
@@ -47,17 +48,19 @@ df.groupby('Visits_cut').agg({'Response' : ['mean','count']})
 
 
 
-    
+'''
+Кодирование и стандартизация
+'''
+
 LE=LabelEncoder()
 for i in obj_col:
     df[i]=df[[i]].apply(LE.fit_transform)
  
+df['Dt_Customer']=df[['Dt_Customer']].apply(LE.fit_transform)
 
-del_cols = ['Age_cut', 'Visits_cut', 'Response']
-y = df['Response']
+del_cols = ['Age_cut', 'Visits_cut', 'Response', 'ID']
 X = df.drop(del_cols, axis = 1)
-
-X = X["Dt_Customer"].values.astype('datetime64[D]')
+y = df['Response']
 
 scaler = StandardScaler()
 scaler.fit(X)
