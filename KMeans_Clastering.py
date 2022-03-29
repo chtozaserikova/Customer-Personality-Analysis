@@ -2,7 +2,29 @@ from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
 from sklearn.mixture import GaussianMixture
 import plotly.express as px
+from sklearn.decomposition import PCA
 
+
+'''
+Уменьшение размерности
+'''
+
+variance_ratio = {}
+for i in range(1, len(scaled_features.columns)+1):
+    pca = PCA(n_components=i)
+    pca.fit(scaled_features)
+    variance_ratio[f'n_{i}'] = pca.explained_variance_ratio_.sum()
+sorted(variance_ratio.items(), key=lambda x: x[1], reverse=True)    
+
+df_pca = pd.DataFrame(pca.components_[0:5],
+                         columns=scaled_features.columns,
+                         index = ['PC1','PC2','PC3', 'PC4', 'PC5']).T
+df_pca
+
+
+'''
+Поиск числа кластеров
+'''
 
 range_n_clusters = list(range(2, 7))
 for n_clusters in range_n_clusters:
