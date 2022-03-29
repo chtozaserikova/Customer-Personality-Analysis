@@ -15,23 +15,30 @@ obj_col = list(df.select_dtypes(['object']).columns)
 df[col_for_stat].describe().style.background_gradient(cmap='YlOrRd') 
 
 
-#разберись с глобальными переменными и перепиши адекватно 
-counts = []
-def count_outliers(data,col):
-        q1 = data[col].quantile(0.25, interpolation = 'nearest')
-        q3 = data[col].quantile(0.75, interpolation = 'nearest')
-        IQR = q3 - q1
-        
-        minimum = q1 - 1.5*IQR
-        maximum = q3 + 1.5*IQR
-        if data[col].min() < minimum or data[col].max() > maximum:
-            print("Есть выбросы в признаке", i)
-            x = data[data[col] < minimum][col].size
-            y = data[data[col] > maximum][col].size
-            counts.append(i)
-            print('Число выбросов: ', x+y, '\n')
-for i in df[num_col]:
-    count_outliers(df,i)
+'''
+Чистим выбросы (дописать)
+'''
+def count_outliers(df, col):
+  out = []
+  q1 = df[col].quantile(0.25, interpolation = 'nearest')
+  q3 = df[col].quantile(0.75, interpolation = 'nearest')
+  IQR = q3 - q1
+  minimum = q1 - 1.5*IQR
+  maximum = q3 + 1.5*IQR
+  
+  for elem in df[col]:
+    if elem < minimum or elem > maximum:
+      out.append(df.loc[df[col]==elem].index[0])
+      
+  df.drop(labels = out, axis = 0, inplace = True) 
+  
+count_outliers(df, 'Income')
+count_outliers(df, 'Age')
+count_outliers(df, 'MntWines')
+count_outliers(df, 'MntMeatProducts')
+count_outliers(df, 'MntFruits')
+
+
 
 
 '''
