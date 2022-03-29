@@ -5,10 +5,15 @@
 Вычислим сводную статистику по столбцам
 '''
 
+col_for_stat = ['Income', 'Recency', 'MntWines', 'MntFruits', 'MntMeatProducts', 
+                'MntFishProducts', 'MntSweetProducts', 'MntGoldProds', 
+                'NumDealsPurchases', 'NumWebPurchases', 'NumCatalogPurchases', 
+                'NumStorePurchases', 'NumWebVisitsMonth', 'Age']
 num_col = list(df.select_dtypes(['int64', 'float64', 'datetime64[ns]']).columns)
 obj_col = list(df.select_dtypes(['object']).columns)
 
-df.loc[:, df.columns != 'ID'].describe().style.background_gradient(cmap='YlOrRd')  
+df[col_for_stat].describe().style.background_gradient(cmap='YlOrRd') 
+
 
 #разберись с глобальными переменными и перепиши адекватно 
 counts = []
