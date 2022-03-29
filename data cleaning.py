@@ -45,8 +45,14 @@ df['Education'].unique()
 df["Education"]=df["Education"].replace({"Basic":"Undergraduate","2n Cycle":"Undergraduate", 
                                          "Graduation":"Graduate", "Master":"Postgraduate", "PhD":"Postgraduate"})
 
-col_to_drop = ['Year_Birth', 'Marital_Status']
-df = df.drop(col_to_drop, axis=1)
+df['Kids'] = df['Kidhome'] + df['Teenhome']
+df['Expenses'] = df['MntWines'] + df['MntFruits'] + df['MntMeatProducts'] + df['MntFishProducts'] + df['MntSweetProducts'] + df['MntGoldProds']
+df['Total_Accepted'] = df['AcceptedCmp1'] + df['AcceptedCmp2'] + df['AcceptedCmp3'] + df['AcceptedCmp4'] + df['AcceptedCmp5']
+df['Total_Purchases'] = df['NumWebPurchases'] + df['NumCatalogPurchases'] + df['NumStorePurchases'] + df['NumDealsPurchases']
+
+col_to_drop = ['Year_Birth', 'Marital_Status', 'ID', 'Kidhome', 'Teenhome', 'Dt_Customer']
+df.drop(col_to_drop, inplace = True, axis=1)
+
 
 
 '''
