@@ -68,9 +68,8 @@ LE=LabelEncoder()
 for i in obj_col:
     df[i]=df[[i]].apply(LE.fit_transform)
  
-df['Dt_Customer']=df[['Dt_Customer']].apply(LE.fit_transform)
 
-del_cols = ['Age_cut', 'Visits_cut', 'Response', 'ID']
+del_cols = ['Age_cut', 'Visits_cut', 'Response']
 X = df.drop(del_cols, axis = 1)
 y = df['Response']
 
