@@ -28,6 +28,22 @@ plt.show()
 
 
 '''
+собственное значение для рассчитанной ковариационной матрицы
+'''
+eigen_value = np.sort(pca.explained_variance_)[::-1]
+plt.figure(figsize=(10, 10))
+plt.plot([key for key in variance_ratio.keys()], eigen_value)
+plt.ylim(0, 10, 1)
+plt.axhline(1, color = 'red', ls = '--')
+plt.title('Elbow Point')
+plt.show()
+
+print(f'число собственных значений больше 1 (10%): {len(eigen_value[eigen_value > 1])}')
+
+#получили 7 признаков
+
+
+'''
 Поиск числа кластеров
 '''
 
