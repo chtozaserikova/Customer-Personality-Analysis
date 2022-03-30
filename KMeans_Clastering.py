@@ -14,12 +14,17 @@ for i in range(1, len(scaled_features.columns)+1):
     pca = PCA(n_components=i)
     pca.fit(scaled_features)
     variance_ratio[f'n_{i}'] = pca.explained_variance_ratio_.sum()
-sorted(variance_ratio.items(), key=lambda x: x[1], reverse=True)    
+variance_ratio 
 
-df_pca = pd.DataFrame(pca.components_[0:5],
-                         columns=scaled_features.columns,
-                         index = ['PC1','PC2','PC3', 'PC4', 'PC5']).T
-df_pca
+
+plt.figure(figsize = (12, 5))
+plt.plot([key for key in variance_ratio.keys()], [val for val in variance_ratio.values()])
+plt.axhline(0.7, color = 'red', ls = '--', lw = 1)
+plt.axhline(0.9, color = 'red', ls = '--', lw = 1.5)
+plt.title("Variance Ratio")
+plt.show()
+
+#видим, что при доли от общей дисперсии равной 70% нужно взять 8 признаков, при 90% - 15 признаков
 
 
 '''
