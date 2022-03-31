@@ -3,6 +3,7 @@ from sklearn.metrics import silhouette_score
 from sklearn.mixture import GaussianMixture
 import plotly.express as px
 from sklearn.decomposition import PCA
+from yellowbrick.cluster import KElbowVisualizer
 
 
 '''
@@ -37,7 +38,6 @@ df_PCA.shape
 Поиск числа кластеров
 '''
 
-from yellowbrick.cluster import KElbowVisualizer
 km = KMeans()
 elbow = KElbowVisualizer(estimator = km, k = 10)
 elbow.fit(df_PCA)
