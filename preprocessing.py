@@ -6,9 +6,8 @@
 '''
 
 col_for_stat = ['Income', 'Recency', 'MntWines', 'MntFruits', 'MntMeatProducts', 
-                'MntFishProducts', 'MntSweetProducts', 'MntGoldProds', 
-                'NumDealsPurchases', 'NumWebPurchases', 'NumCatalogPurchases', 
-                'NumStorePurchases', 'NumWebVisitsMonth', 'Age']
+                'MntFishProducts', 'MntSweetProducts', 'MntGoldProds', 'Age',
+                'NumWebVisitsMonth', 'Expenses', 'Total_Accepted', 'Total_Purchases']
 num_col = list(df.select_dtypes(['int64', 'float64', 'datetime64[ns]']).columns)
 obj_col = list(df.select_dtypes(['object']).columns)
 
@@ -25,18 +24,15 @@ def count_outliers(df, col):
   IQR = q3 - q1
   minimum = q1 - 1.5*IQR
   maximum = q3 + 1.5*IQR
-  
   for elem in df[col]:
     if elem < minimum or elem > maximum:
-      out.append(df.loc[df[col]==elem].index[0])
-      
+      out.append(df.loc[df[col]==elem].index[0])  
   df.drop(labels = out, axis = 0, inplace = True) 
   
-count_outliers(df, 'Income')
-count_outliers(df, 'Age')
-count_outliers(df, 'MntWines')
-count_outliers(df, 'MntMeatProducts')
-count_outliers(df, 'MntFruits')
+for x in col_for_stat:
+  count_outliers(df, x)
+  
+df.shape
 
 
 
@@ -45,7 +41,7 @@ count_outliers(df, 'MntFruits')
 Визуализация и анализ
 '''
 plt.figure(figsize=(16,9))
-ax = sns.heatmap(df.corr(),annot = True,cmap = 'viridis')
+ax = sns.heatmap(df[col_for_stat].corr(),annot = True,cmap = 'viridis')
 plt.show()
 
 df['Age_cut'] = pd.qcut(df['Age'], q=5)
