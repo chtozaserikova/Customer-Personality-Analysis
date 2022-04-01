@@ -4,6 +4,7 @@ from sklearn.mixture import GaussianMixture
 import plotly.express as px
 from sklearn.decomposition import PCA
 from yellowbrick.cluster import KElbowVisualizer
+import plotly.graph_objects as go 
 
 
 '''
@@ -69,27 +70,19 @@ plt.show()
 
 '''
 Подтвердили, что оптимальное число кластеров - 5
-Перейдем к созданию модели
 '''
 
-gmm = GaussianMixture(n_components = 4, covariance_type = 'spherical', max_iter = 3000, random_state = 228).fit(X)
-labels = gmm.predict(X)
-X['Cluster'] = labels
-re_clust = {
-    0: 'Ordinary client',
-    1: 'Elite client',
-    2: 'Good client',
-    3: 'Potential good client'}
-X['Cluster'] = X['Cluster'].map(re_clust)
+kmeans = KMeans(n_clusters=5, random_state=10)
+predictions = kmeans.fit_predict(df_PCA)
+df["Clusters"] = predictions
 
 
-fig = px.pie(X['Cluster'].value_counts().reset_index(), values = 'Cluster', names = 'index', width = 700, height = 700)
-fig.update_traces(textposition = 'inside', textinfo = 'percent + label', hole = 0.8, 
-                  marker = dict(colors = ['#dd4124','#009473', '#336b87', '#b4b4b4'], line = dict(color = 'white', width = 2)),
-                  hovertemplate = 'Clients: %{value}')
-fig.update_layout(annotations = [dict(text = 'Number of clients <br>by cluster', 
-                                      x = 0.5, y = 0.5, font_size = 28, showarrow = False, 
-                                      font_family = 'monospace',
-                                      font_color = 'black')],
-                  showlegend = False)                  
+labels = ["Cluster 0", "Cluster 1", "Cluster 2", "Cluster 3", "Cluster 4" ]
+cluster0_num = df[df["Clusters"]==0].shape[0]
+cluster1_num = df[df["Clusters"]==1].shape[0]
+cluster2_num = df[df["Clusters"]==2].shape[0]
+cluster3_num = df[df["Clusters"]==3].shape[0]
+cluster4_num = df[df["Clusters"]==4].shape[0]
+values = [cluster0_num, cluster1_num, cluster2_num, cluster3_num, cluster4_num]
+fig = go.Figure(data=[go.Pie(labels=labels, values=values, hole=0.6, title="Clusters")])
 fig.show()
