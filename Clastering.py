@@ -74,15 +74,15 @@ plt.show()
 
 kmeans = KMeans(n_clusters=5, random_state=10)
 predictions = kmeans.fit_predict(df_PCA)
-df["Clusters"] = predictions
+df["Clusters"] = predictions + 1
 
 
 labels = ["Cluster 0", "Cluster 1", "Cluster 2", "Cluster 3", "Cluster 4" ]
-cluster0_num = df[df["Clusters"]==0].shape[0]
-cluster1_num = df[df["Clusters"]==1].shape[0]
-cluster2_num = df[df["Clusters"]==2].shape[0]
-cluster3_num = df[df["Clusters"]==3].shape[0]
-cluster4_num = df[df["Clusters"]==4].shape[0]
+cluster0_num = df[df["Clusters"]==1].shape[0]
+cluster1_num = df[df["Clusters"]==2].shape[0]
+cluster2_num = df[df["Clusters"]==3].shape[0]
+cluster3_num = df[df["Clusters"]==4].shape[0]
+cluster4_num = df[df["Clusters"]==5].shape[0]
 values = [cluster0_num, cluster1_num, cluster2_num, cluster3_num, cluster4_num]
 fig = go.Figure(data=[go.Pie(labels=labels, values=values, hole=0.6, title="Clusters")])
 fig.show()
