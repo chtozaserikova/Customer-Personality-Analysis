@@ -32,6 +32,10 @@ df["Dt_Customer"] = pd.to_datetime(df["Dt_Customer"])
 print('Дата регистрации первого клиента: ', df.Dt_Customer.min())
 print('Дата регистрации последнего клиента: ', df.Dt_Customer.max())
 
+df['first_day'] = '01-01-2015'
+df['first_day'] = pd.to_datetime(df.first_day)
+df['Day_engaged'] = (df['first_day'] - df['Dt_Customer']).dt.days
+
 df["Age"] = 2022-df["Year_Birth"]
 
 df['Marital_Status'].unique()
@@ -50,7 +54,7 @@ df['Expenses'] = df['MntWines'] + df['MntFruits'] + df['MntMeatProducts'] + df['
 df['Total_Accepted'] = df['AcceptedCmp1'] + df['AcceptedCmp2'] + df['AcceptedCmp3'] + df['AcceptedCmp4'] + df['AcceptedCmp5']
 df['Total_Purchases'] = df['NumWebPurchases'] + df['NumCatalogPurchases'] + df['NumStorePurchases'] + df['NumDealsPurchases']
 
-col_to_drop = ['Year_Birth', 'Marital_Status', 'ID', 'Kidhome', 'Teenhome', 'Dt_Customer']
+col_to_drop = ['Year_Birth', 'Marital_Status', 'ID', 'Kidhome', 'Teenhome', 'Dt_Customer', 'first_day']
 df.drop(col_to_drop, inplace = True, axis=1)
 
 
