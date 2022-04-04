@@ -14,7 +14,7 @@ import plotly.graph_objects as go
 variance_ratio = {}
 for i in range(3, 13):
     pca = PCA(n_components=i)
-    pca.fit(scaled_features)
+    pca.fit(scaled_df)
     variance_ratio[f'n_{i}'] = pca.explained_variance_ratio_.sum()
 variance_ratio 
 
@@ -29,10 +29,10 @@ plt.show()
 #видим, что 8 прищнаков объясняют 70% дисперсии, а 90% - 15 признаков
 
 pca = PCA(n_components=8)
-pca.fit(scaled_features)
+pca.fit(scaled_df)
 print(pca.explained_variance_ratio_)
 print(pca.explained_variance_)
-df_PCA = pca.transform(scaled_features)
+df_PCA = pca.transform(scaled_df)
 df_PCA.shape
 
 '''
