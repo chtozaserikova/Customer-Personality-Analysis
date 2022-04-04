@@ -1,11 +1,13 @@
 from sklearn.cluster import DBSCAN 
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, GridSearchCV, cross_val_score
 from imblearn.over_sampling import SMOTE
-from sklearn.model_selection import GridSearchCV
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, recall_score
 from sklearn.svm import SVC
 from xgboost import XGBClassifier
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.ensemble import VotingClassifier, AdaBoostClassifier
+from sklearn.tree import DecisionTreeClassifier
 
 
 db = DBSCAN(eps=0.726, min_samples=26)
