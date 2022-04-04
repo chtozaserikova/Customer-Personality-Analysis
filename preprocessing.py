@@ -71,5 +71,5 @@ X = df.drop('Response', axis = 1)
 y = df['Response']
 
 scaler = StandardScaler()
-scaler.fit(df)
-scaled_df = pd.DataFrame(scaler.transform(df),columns = df.columns)
+scaler.fit(X)
+scaled_X = pd.DataFrame(scaler.transform(X),columns= X.columns)
