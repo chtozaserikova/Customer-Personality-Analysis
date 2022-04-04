@@ -9,7 +9,7 @@ from xgboost import XGBClassifier
 
 
 db = DBSCAN(eps=0.726, min_samples=26)
-db.fit(df_PCA)
+db.fit(X_PCA)
 clusters = db.labels_
 n_clusters_ = len(set(clusters)) - (1 if -1 in clusters else 0)
 n_noise_ = list(clusters).count(-1)
@@ -21,7 +21,7 @@ for i in range(n_clusters_):
 
     
 
-X_train, X_test, y_train, y_test = train_test_split(df_PCA, y, test_size=0.3, random_state=8)
+X_train, X_test, y_train, y_test = train_test_split(X_PCA, y, test_size=0.3, random_state=8)
 X_val, X_test, y_val, y_test = train_test_split(X_test, y_test, test_size=0.5, random_state=8)
 print('Длина каждого датасета:')
 print('Тренировочный набор:', len(X_train))
@@ -60,3 +60,22 @@ xgb_val_acc = accuracy_score(y_val, xgb_preds)
 xgb_val_rec = recall_score(y_val, xgb_preds)
 print('Accuracy:', xgb_val_acc)
 print('Recall:', xgb_val_rec)
+
+
+knn_params = {'n_neighbors': [5, 7, 9, 11, 15, 20], 'algorithm': ['ball_tree', 'kd_tree', 'brute'],
+             'weights': ['uniform', 'distance']}
+knn_grid = GridSearchCV(KNeighborsClassifier(), knn_params, cv=5, scoring='recall')
+knn_grid.fit(X_bal, y_bal)
+knn = knn_grid.best_estimator_
+print('Лучшие параметры:', knn_grid.best_params_)
+knn_preds = knn.predict(X_val)
+knn_val_acc = accuracy_score(y_val, knn_preds)
+knn_val_rec = recall_score(y_val, knn_preds)
+print('Accuracy:', knn_val_acc)
+print('Recall:', knn_val_rec)
+
+
+clf = AdaBoostClassifier(base_estimator=DecisionTreeClassifier(max_depth=2), n_estimators=160, random_state=10)  
+BT_cv_results_acc = cross_val_score(clf, X_train, y_train, cv=5, scoring='accuracy')   
+msg = "k-fold Accuracy: %f (%f)" % (BT_cv_results_acc.mean(), BT_cv_results_acc.std())
+print(msg)
