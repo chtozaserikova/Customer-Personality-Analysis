@@ -14,7 +14,7 @@ if not sys.warnoptions:
     warnings.simplefilter("ignore")
 np.random.seed(42)
 
-df = pd.read_csv('/marketing_campaign.csv', sep="\t")
+df = pd.read_csv('/content/marketing_campaign.csv', sep="\t")
 
 df.isnull().sum() * 100 / len(df)
 
@@ -54,7 +54,10 @@ df['Expenses'] = df['MntWines'] + df['MntFruits'] + df['MntMeatProducts'] + df['
 df['Total_Accepted'] = df['AcceptedCmp1'] + df['AcceptedCmp2'] + df['AcceptedCmp3'] + df['AcceptedCmp4'] + df['AcceptedCmp5']
 df['Total_Purchases'] = df['NumWebPurchases'] + df['NumCatalogPurchases'] + df['NumStorePurchases'] + df['NumDealsPurchases']
 
-col_to_drop = ['Year_Birth', 'Marital_Status', 'ID', 'Kidhome', 'Teenhome', 'Dt_Customer', 'first_day']
+df.apply(pd.Series.nunique)
+
+col_to_drop = ['Year_Birth', 'Marital_Status', 'ID', 'Kidhome', 'Teenhome', 'Dt_Customer', 'first_day', 
+               'AcceptedCmp1', 'AcceptedCmp2', 'AcceptedCmp3', 'AcceptedCmp4', 'AcceptedCmp5']
 df.drop(col_to_drop, inplace = True, axis=1)
 
 
