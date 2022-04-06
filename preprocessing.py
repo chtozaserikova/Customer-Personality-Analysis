@@ -51,7 +51,7 @@ def delete_corr(df, cut_off = 0.7, exclude = []):
       plt.title('Высокая корреляция', fontsize=20)
       sns.heatmap(corr_matrix[(corr_matrix>cut_off) & (corr_matrix!=1)].dropna(axis=0, how='all').dropna(axis=1, how='all'), annot=True, linewidths=.5)
   except:
-      print ('No highly correlated features found')
+      print ('Нет признаков с высокой коррлеляцией')
 
   to_drop = [column for column in upper.columns if any(upper[column]>cut_off)]
   to_drop = [column for column in to_drop if column not in exclude]
