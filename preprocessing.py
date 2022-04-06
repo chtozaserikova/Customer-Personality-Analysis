@@ -35,14 +35,40 @@ for x in col_for_stat:
 df.shape
 
 
+'''
+удаление корреляций
+'''
+
+def delete_corr(df, cut_off = 0.7, exclude = []):
+  corr_matrix = df.corr().abs()
+  upper = corr_matrix.where(np.triu(np.ones(corr_matrix.shape), k=1).astype(np.bool))
+  f, ax = plt.subplots(figsize=(15, 10))
+  plt.title('Все корреляции', fontsize=20)
+  sns.heatmap(df.corr(), annot=True)
+  
+  try:
+      f, ax = plt.subplots(figsize=(15, 10))
+      plt.title('Высокая корреляция', fontsize=20)
+      sns.heatmap(corr_matrix[(corr_matrix>cut_off) & (corr_matrix!=1)].dropna(axis=0, how='all').dropna(axis=1, how='all'), annot=True, linewidths=.5)
+  except:
+      print ('No highly correlated features found')
+
+  to_drop = [column for column in upper.columns if any(upper[column]>cut_off)]
+  to_drop = [column for column in to_drop if column not in exclude]
+  print('Удаленные признаки:', to_drop, '\n')
+  df2 = df.drop(to_drop, axis = 1)
+
+  f, ax = plt.subplots(figsize=(15, 10))
+  plt.title('Финальная корреляция', fontsize = 20)
+  sns.heatmap(df2.corr(), annot=True)
+  plt.show()
+
+  return df2
 
 
 '''
 Визуализация и анализ
 '''
-plt.figure(figsize=(16,9))
-ax = sns.heatmap(df[col_for_stat].corr(),annot = True,cmap = 'viridis')
-plt.show()
 
 df['Age_cut'] = pd.qcut(df['Age'], q=5)
 df.groupby('Age_cut').agg({'Response' : ['mean','count']})
