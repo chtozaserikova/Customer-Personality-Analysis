@@ -62,8 +62,9 @@ def delete_corr(df, cut_off = 0.7, exclude = []):
   plt.title('Финальная корреляция', fontsize = 20)
   sns.heatmap(df2.corr(), annot=True)
   plt.show()
-
   return df2
+
+delete_corr(df)
 
 
 '''
